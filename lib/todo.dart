@@ -8,8 +8,13 @@ class TODO extends StatefulWidget {
 }
 
 class _TODOState extends State<TODO> {
+  @override
+  void initState() {
+    super.initState();
+    _filteredTasks = _tasks;
+  }
   final List<Map<String, dynamic>> _tasks = [];
-  bool _showActiveTask = true;
+  late List<Map<String, dynamic>> _filteredTasks = [];
 
   void _addTask(String task) {
     setState(() {
@@ -82,8 +87,10 @@ class _TODOState extends State<TODO> {
     });
   }
 
+
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       appBar: AppBar(
         title: Text('TODO List'),
@@ -105,21 +112,28 @@ class _TODOState extends State<TODO> {
             color: Colors.white,
             child: Column(
               children: [
-                Card(
-                  elevation: 10,
-                  color: Colors.blueGrey,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: SizedBox(
-                    height: 50,
-                    child: Center(
-                      child: Text(
-                        'Total Task:  ${_tasks.length}',
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
+                GestureDetector(
+                  onTap: (){
+                    setState(() {
+                      _filteredTasks = _tasks;
+                    });
+                  },
+                  child: Card(
+                    elevation: 10,
+                    color: Colors.blueGrey,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: SizedBox(
+                      height: 50,
+                      child: Center(
+                        child: Text(
+                          'Total Task:  ${_tasks.length}',
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
                         ),
                       ),
                     ),
@@ -128,78 +142,92 @@ class _TODOState extends State<TODO> {
                 Row(
                   children: [
                     Expanded(
-                      child: Card(
-                        elevation: 10,
-                        color: Colors.blueGrey,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        child: SizedBox(
-                          height: 150,
-                          child: Center(
-                            child: Column(
-                              children: [
-                                SizedBox(height: 15),
-                                Text(
-                                  'Active Task',
-                                  style: TextStyle(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white,
+                      child: GestureDetector(
+                        onTap: (){
+                          setState(() {
+                            _filteredTasks = _tasks.where((task)=>!task['status']).toList();
+                          });
+                        },
+                        child: Card(
+                          elevation: 10,
+                          color: Colors.blueGrey,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: SizedBox(
+                            height: 150,
+                            child: Center(
+                              child: Column(
+                                children: [
+                                  SizedBox(height: 15),
+                                  Text(
+                                    'Active Task',
+                                    style: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white,
+                                    ),
                                   ),
-                                ),
-                                SizedBox(height: 15),
-                                Text(
-                                  _tasks
-                                      .where((task) => !task['status'])
-                                      .length
-                                      .toString(),
-                                  style: TextStyle(
-                                    fontSize: 40,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white,
+                                  SizedBox(height: 15),
+                                  Text(
+                                    _tasks
+                                        .where((task) => !task['status'])
+                                        .length
+                                        .toString(),
+                                    style: TextStyle(
+                                      fontSize: 40,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white,
+                                    ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
                           ),
                         ),
                       ),
                     ),
                     Expanded(
-                      child: Card(
-                        elevation: 10,
-                        color: Colors.blueGrey,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        child: SizedBox(
-                          height: 150,
-                          child: Center(
-                            child: Column(
-                              children: [
-                                SizedBox(height: 15),
-                                Text(
-                                  'Completed Task',
-                                  style: TextStyle(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white,
+                      child: GestureDetector(
+                        onTap: (){
+                          setState(() {
+                            _filteredTasks = _tasks.where((task)=>task['status']).toList();
+                          });
+                        },
+                        child: Card(
+                          elevation: 10,
+                          color: Colors.blueGrey,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: SizedBox(
+                            height: 150,
+                            child: Center(
+                              child: Column(
+                                children: [
+                                  SizedBox(height: 15),
+                                  Text(
+                                    'Completed Task',
+                                    style: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white,
+                                    ),
                                   ),
-                                ),
-                                SizedBox(height: 15),
-                                Text(
-                                  _tasks
-                                      .where((task) => task['status'])
-                                      .length
-                                      .toString(),
-                                  style: TextStyle(
-                                    fontSize: 40,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.greenAccent,
+                                  SizedBox(height: 15),
+                                  Text(
+                                    _tasks
+                                        .where((task) => task['status'])
+                                        .length
+                                        .toString(),
+                                    style: TextStyle(
+                                      fontSize: 40,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.greenAccent,
+                                    ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
                           ),
                         ),
@@ -213,7 +241,7 @@ class _TODOState extends State<TODO> {
           SizedBox(height: 25),
           Expanded(
             child: ListView.builder(
-              itemCount: _tasks.length,
+              itemCount: _filteredTasks.length,
               itemBuilder:
                   (context, index) => Padding(
                     padding: const EdgeInsets.only(
@@ -248,17 +276,16 @@ class _TODOState extends State<TODO> {
                           borderRadius: BorderRadius.circular(15),
                         ),
                         leading: Checkbox(
-                          value: _tasks[index]['status'],
+                          value: _filteredTasks[index]['status'],
                           onChanged: (value) => _toggleTaskStatus(index),
                         ),
-                        title: Text(_tasks[index]['task']),
-                        // subtitle: Text('Subtitle here'),
+                        title: Text(_filteredTasks[index]['task']),
                         tileColor: Colors.grey.shade300,
                         trailing: Text(
-                          _tasks[index]['status'] ? 'Completed' : 'Active',
+                          _filteredTasks[index]['status'] ? 'Completed' : 'Active',
                           style: TextStyle(
                             color:
-                                _tasks[index]['status']
+                            _filteredTasks[index]['status']
                                     ? Colors.green
                                     : Colors.blueAccent,
                             fontSize: 15,
